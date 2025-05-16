@@ -23,22 +23,22 @@ public class S3Service {
 
     public Map<String, String> getS3Content() {
         String bucketName = "kuberocketci-applications-data";
-        String key = "cmtr-dsdcocl2/data.text";
+        String key = "cmtr-dsdcocl2/data.txt";
 
         try {
-            // Build the GetObjectRequest
+            // Build the GetObjectRequest without requiring ListBucket permission
             GetObjectRequest getObjectRequest = GetObjectRequest.builder()
-                    .bucket(bucketName)
-                    .key(key)
-                    .build();
+                .bucket(bucketName)
+                .key(key)
+                .build();
 
-            // Fetch the file from S3
+            // Fetch the file from S3 (GetObject does not require ListBucket)
             InputStream inputStream = s3Client.getObject(getObjectRequest);
 
             // Read the content of the file
             String content = new BufferedReader(new InputStreamReader(inputStream))
-                    .lines()
-                    .collect(Collectors.joining("\n"));
+                .lines()
+                .collect(Collectors.joining("\n"));
 
             // Prepare the JSON response
             Map<String, String> response = new HashMap<>();
